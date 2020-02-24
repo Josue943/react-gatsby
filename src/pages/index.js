@@ -1,21 +1,47 @@
 import React from "react"
-import { Link } from "gatsby"
+import Layout from "../components/Layout"
+import ImageHotel from "../components/ImageHotel"
+import ContentHome from "../components/ContentHome"
+import useRoom from "../components/hooks/useRoom"
+import useSeo from "../components/hooks/useSeo"
+import RoomPreview from "../components/RoomPreview"
+import styled from "@emotion/styled"
 
-import Layout from "../components/layout"
-import Image from "../components/image"
-import SEO from "../components/seo"
+const IndexPage = () => {
+  const rooms = useRoom()
+  const seo = useSeo()
+  return (
+    <Layout seo={seo}>
+      <ImageHotel />
+      <ContentHome />
+      <Rooms>
+        <h2>Our Rooms</h2>
+        <List>
+          {rooms.map(room => (
+            <RoomPreview room={room} key={room.id} />
+          ))}
+        </List>
+      </Rooms>
+    </Layout>
+  )
+}
 
-const IndexPage = () => (
-  <Layout>
-    <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-      <Image />
-    </div>
-    <Link to="/page-2/">Go to page 2</Link>
-  </Layout>
-)
+const Rooms = styled.div`
+  width: 95%;
+  max-width: 1200px;
+  margin: 30px auto;
+  h2 {
+    text-align: center;
+    padding-bottom: 30px;
+  }
+`
+
+const List = styled.ul`
+  @media (min-width: 768px) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 4rem;
+  }
+`
 
 export default IndexPage

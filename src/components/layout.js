@@ -1,51 +1,66 @@
-/**
- * Layout component that queries for data
- * with Gatsby's useStaticQuery component
- *
- * See: https://www.gatsbyjs.org/docs/use-static-query/
- */
-
 import React from "react"
-import PropTypes from "prop-types"
-import { useStaticQuery, graphql } from "gatsby"
+import Header from "./Header"
+import Helmet from "react-helmet" //esto lo trae gatsby es para modicar el head
+import { Global, css } from "@emotion/core"
+import Footer from "./Footer"
 
-import Header from "./header"
-import "./layout.css"
-
-const Layout = ({ children }) => {
-  const data = useStaticQuery(graphql`
-    query SiteTitleQuery {
-      site {
-        siteMetadata {
-          title
-        }
-      }
-    }
-  `)
+const layout = ({ children, seo }) => {
+  const {
+    siteName,
+    fallbackSeo: { description, title },
+  } = seo
 
   return (
     <>
-      <Header siteTitle={data.site.siteMetadata.title} />
-      <div
-        style={{
-          margin: `0 auto`,
-          maxWidth: 960,
-          padding: `0 1.0875rem 1.45rem`,
-        }}
-      >
-        <main>{children}</main>
-        <footer>
-          © {new Date().getFullYear()}, Built with
-          {` `}
-          <a href="https://www.gatsbyjs.org">Gatsby</a>
-        </footer>
-      </div>
+      <Global
+        styles={css`
+          html {
+            font-size: 62.5%;
+            height: 100%;
+          }
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+          body {
+            min-height: 100%;
+            position: relative;
+            font-size: 18px;
+            font-size: 1.8rem;
+            line-height: 1.5;
+            font-family: "PT sans", sans-serif;
+          }
+          h1,
+          h2,
+          h3 {
+            line-height: 1.5;
+          }
+          h1,
+          h2 {
+            font-family: "Roboto", serif;
+          }
+          h3 {
+            font-family: "PT sans", sans-serif;
+          }
+          ul {
+            list-style: none;
+          }
+        `}
+      />
+      <Helmet>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <link
+          href="https://fonts.googleapis.com/css?family=PT+Sans|Roboto:400,700&display=swap"
+          rel="stylesheet"
+        ></link>
+      </Helmet>
+      <Header title={title} />
+      {children}
+      <Footer title={title} />
     </>
   )
 }
 
-Layout.propTypes = {
-  children: PropTypes.node.isRequired,
-}
-
-export default Layout
+export default layout
